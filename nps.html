@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Globetek — Encuesta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#06142E;
+    --deeplayer:#2E8BC0;
+    --neon:#00E7FF;
+    --coral:#E83E62;
+    --cloudmist:#F4F7FA;
+    --steeltint:#E1E6EB;
+    --coolgrey:#B5C0CC;
+    --slate:#7A8897;
+    --ink:#1A2433;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--cloudmist);
+    font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:32px 16px;
+  }
+  .card{
+    max-width:520px;
+    width:100%;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 12px 32px rgba(6,20,46,.14);
+  }
+  .head{background:var(--navy);padding:24px 28px;display:flex;align-items:center;}
+  .wordmark{color:#fff;font-weight:800;font-size:21px;letter-spacing:-0.02em;}
+  .wordmark b{color:var(--neon);font-weight:800;}
+  .body{padding:34px 28px 28px;}
+  .eyebrow{
+    font-size:12px;color:var(--slate);font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;margin:0 0 10px;
+  }
+  h1{
+    font-size:20px;font-weight:700;color:var(--navy);
+    margin:0 0 12px;line-height:1.35;text-wrap:balance;
+  }
+  p.copy{font-size:14px;color:#3d4a5c;line-height:1.6;margin:0 0 26px;max-width:40ch;}
+
+  /* 0-10 laid out as two rows of 6 and 5 so the numbers stay legible at phone width,
+     instead of eleven 24px-wide slivers. */
+  .scale{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:0 0 10px;}
+  .num{
+    aspect-ratio:1;border-radius:11px;border:none;background:var(--cloudmist);
+    display:flex;align-items:center;justify-content:center;
+    font-family:inherit;font-size:15px;font-weight:700;color:var(--slate);
+    cursor:pointer;padding:0;font-variant-numeric:tabular-nums;
+    transition:transform .12s ease, background .12s ease, color .12s ease;
+  }
+  .num:hover{transform:translateY(-2px);}
+  .num:focus-visible{outline:2px solid var(--deeplayer);outline-offset:2px;}
+  .num.active{background:var(--coral);color:#fff;}
+  .num:disabled{cursor:default;}
+  /* Detractor / passive / promoter, so the chosen answer reads back in NPS's own terms. */
+  .num.active.promoter{background:#1F9D76;}
+  .num.active.passive{background:var(--deeplayer);}
+
+  .scalelabels{
+    display:flex;justify-content:space-between;font-size:10.5px;
+    color:var(--slate);margin:0 0 22px;padding:0 2px;
+  }
+  .thanks{display:none;padding:34px 28px 30px;}
+  .thanks .chosen{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:56px;height:56px;padding:0 14px;border-radius:14px;
+    background:var(--coral);color:#fff;font-size:24px;font-weight:800;
+    margin:0 0 20px;font-variant-numeric:tabular-nums;
+  }
+  .thanks .chosen.promoter{background:#1F9D76;}
+  .thanks .chosen.passive{background:var(--deeplayer);}
+  .thanks h2{font-size:21px;color:var(--navy);margin:0 0 10px;font-weight:700;line-height:1.35;}
+  .thanks p{font-size:14px;color:#3d4a5c;margin:0;line-height:1.6;max-width:40ch;}
+  .foot{
+    background:var(--cloudmist);padding:14px 28px;font-size:11px;
+    color:var(--slate);border-top:1px solid var(--steeltint);
+  }
+  .err{display:none;color:var(--coral);font-size:12.5px;margin:14px 0 0;font-weight:600;}
+  @media (prefers-reduced-motion: reduce){ .num{transition:none;} }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head"><span class="wordmark">globe<b>tek</b></span></div>
+
+  <div class="body" id="rateView">
+    <p class="eyebrow" id="txtEyebrow">NPS · Customer Success</p>
+    <h1 id="txtTitle">¿Qué tan probable es que recomiendes Globetek a un amigo o colega?</h1>
+    <p class="copy" id="txtCopy">Queremos saber tu opinión — tocá un número, toma 10 segundos.</p>
+
+    <div class="scale" id="scale" role="group" aria-label="Puntaje de 0 a 10"></div>
+    <div class="scalelabels">
+      <span id="txtLow">No es probable</span>
+      <span id="txtHigh">Muy probable</span>
+    </div>
+
+    <p class="err" id="errMsg">No pudimos registrar tu respuesta. Intentá de nuevo.</p>
+  </div>
+
+  <div class="thanks" id="thanksView">
+    <div class="chosen" id="chosenNum">0</div>
+    <h2 id="txtThanksTitle">¡Gracias por tu tiempo!</h2>
+    <p id="txtThanksCopy">Tu respuesta ya quedó registrada. Tu opinión define cómo seguimos mejorando.</p>
+  </div>
+
+  <div class="foot" id="txtFoot">Equipo de Customer Success · Globetek</div>
+</div>
+
+<script>
+(function(){
+  // Form de HubSpot (legacy, compatible con la API pública de submissions).
+  // El portalId y el GUID son públicos por diseño — es lo mismo que queda
+  // expuesto en cualquier formulario embebido de HubSpot en cualquier web.
+  var PORTAL_ID = '50430632';
+  var FORM_GUID = 'e1b1805d-d4cf-4ea0-956f-65f846bc2edd';
+
+  var params = new URLSearchParams(window.location.search);
+  var lang = (params.get('lang') || 'es').toLowerCase() === 'en' ? 'en' : 'es';
+  var email = params.get('email') || '';
+
+  var i18n = {
+    es: {
+      eyebrow: 'NPS · Customer Success',
+      title: '¿Qué tan probable es que recomiendes Globetek a un amigo o colega?',
+      copy: 'Queremos saber tu opinión — tocá un número, toma 10 segundos.',
+      low: 'No es probable',
+      high: 'Muy probable',
+      err: 'No pudimos registrar tu respuesta. Intentá de nuevo.',
+      thanksTitle: '¡Gracias por tu tiempo!',
+      thanksCopy: 'Tu respuesta ya quedó registrada. Tu opinión define cómo seguimos mejorando.',
+      thanksCopyLow: 'Tu respuesta ya quedó registrada. Alguien del equipo va a contactarte para entender qué podemos hacer mejor.',
+      foot: 'Equipo de Customer Success · Globetek'
+    },
+    en: {
+      eyebrow: 'NPS · Customer Success',
+      title: 'How likely are you to recommend Globetek to a friend or colleague?',
+      copy: "We'd love to hear from you — tap a number, it takes 10 seconds.",
+      low: 'Not at all likely',
+      high: 'Extremely likely',
+      err: "We couldn't save your answer. Please try again.",
+      thanksTitle: 'Thanks for your time!',
+      thanksCopy: 'Your answer has been logged. Your feedback shapes how we keep improving.',
+      thanksCopyLow: 'Your answer has been logged. Someone from the team will reach out to understand what we can do better.',
+      foot: 'Globetek Customer Success Team'
+    }
+  };
+  var t = i18n[lang];
+
+  document.documentElement.lang = lang;
+  document.title = lang === 'en' ? 'Globetek — Survey' : 'Globetek — Encuesta';
+  document.getElementById('txtEyebrow').textContent = t.eyebrow;
+  document.getElementById('txtTitle').textContent = t.title;
+  document.getElementById('txtCopy').textContent = t.copy;
+  document.getElementById('txtLow').textContent = t.low;
+  document.getElementById('txtHigh').textContent = t.high;
+  document.getElementById('errMsg').textContent = t.err;
+  document.getElementById('txtFoot').textContent = t.foot;
+
+  function band(val){
+    if (val >= 9) return 'promoter';
+    if (val >= 7) return 'passive';
+    return '';
+  }
+
+  var scale = document.getElementById('scale');
+  for (var i = 0; i <= 10; i++) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'num';
+    b.id = 'num-' + i;
+    b.setAttribute('data-v', String(i));
+    b.setAttribute('aria-label', String(i));
+    b.textContent = String(i);
+    scale.appendChild(b);
+  }
+  var nums = document.querySelectorAll('.num');
+  var submitted = false;
+
+  function showThanks(val){
+    var chosen = document.getElementById('chosenNum');
+    chosen.textContent = String(val);
+    chosen.className = 'chosen ' + band(val);
+    document.getElementById('txtThanksTitle').textContent = t.thanksTitle;
+    document.getElementById('txtThanksCopy').textContent = val <= 6 ? t.thanksCopyLow : t.thanksCopy;
+    document.getElementById('rateView').style.display = 'none';
+    document.getElementById('thanksView').style.display = 'block';
+  }
+
+  function submitScore(val, onError){
+    var fields = [{name:'nps_score_zappy', value: String(val)}];
+    if (email) fields.unshift({name:'email', value: email});
+
+    return fetch('https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        fields: fields,
+        context: {pageUri: window.location.href, pageName: 'NPS Globetek'}
+      })
+    }).then(function(res){
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      showThanks(val);
+    }).catch(function(){
+      if (onError) onError();
+      else showThanks(val);
+    });
+  }
+
+  // Puntaje elegido en el correo mismo (un link por número, con ?score=N) — un solo
+  // click para el cliente: se registra al cargar y va directo al agradecimiento.
+  var urlScore = parseInt(params.get('score'), 10);
+  if (urlScore >= 0 && urlScore <= 10) {
+    submitted = true;
+    showThanks(urlScore);
+    submitScore(urlScore);
+  }
+
+  nums.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (submitted) return;
+      submitted = true;
+      var val = parseInt(btn.getAttribute('data-v'), 10);
+      btn.classList.add('active');
+      if (band(val)) btn.classList.add(band(val));
+      nums.forEach(function(n){ n.disabled = true; });
+      document.getElementById('errMsg').style.display = 'none';
+
+      submitScore(val, function(){
+        document.getElementById('errMsg').style.display = 'block';
+        submitted = false;
+        btn.className = 'num';
+        nums.forEach(function(n){ n.disabled = false; });
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
