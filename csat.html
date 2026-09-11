@@ -8,6 +8,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- Script de tracking de HubSpot: deja la cookie hubspotutk, que es la que HubSpot usa
+     para reconocer el envío como legítimo. Sin esto, las respuestas entran pero HubSpot
+     las manda a spam ("Unknown domain") sin ningún error visible. -->
+<script type="text/javascript" id="hs-script-loader" async defer src="https://js.hs-scripts.com/50430632.js"></script>
 <style>
   :root{
     --navy:#06142E;
@@ -193,17 +197,38 @@
     document.getElementById('thanksView').style.display = 'block';
   }
 
+  function readHutk(){
+    var m = document.cookie.match(/(^|;\s*)hubspotutk=([^;]+)/);
+    return m ? m[2] : '';
+  }
+
+  // El script de tracking carga async, así que la cookie puede no estar todavía cuando
+  // la calificación viene en la URL y se envía al instante. Se le da un margen corto:
+  // sin la cookie, HubSpot manda la respuesta a spam.
+  function waitForHutk(maxMs){
+    return new Promise(function(resolve){
+      var waited = 0;
+      (function check(){
+        var hutk = readHutk();
+        if (hutk || waited >= maxMs) return resolve(hutk);
+        waited += 150;
+        setTimeout(check, 150);
+      })();
+    });
+  }
+
   function submitScore(val, onError){
     var fields = [{name:'ticket_id', value: ticketId}, {name:'csat_score_zappy', value: String(val)}];
     if (email) fields.unshift({name:'email', value: email});
 
-    return fetch('https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        fields: fields,
-        context: {pageUri: window.location.href, pageName: 'CSAT Globetek'}
-      })
+    return waitForHutk(3000).then(function(hutk){
+      var context = {pageUri: window.location.href, pageName: 'CSAT Globetek'};
+      if (hutk) context.hutk = hutk;
+      return fetch('https://api.hsforms.com/submissions/v3/integration/submit/' + PORTAL_ID + '/' + FORM_GUID, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({fields: fields, context: context})
+      });
     }).then(function(res){
       if (!res.ok) throw new Error('HTTP ' + res.status);
       showThanks(val);
