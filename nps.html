@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Globetek — Encuesta</title>
+<title>Encuesta de Globetek</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -119,9 +119,9 @@
   <div class="edge"></div>
 
   <div class="body" id="rateView">
-    <p class="eyebrow" id="txtEyebrow">NPS · Customer Success</p>
+    <p class="eyebrow" id="txtEyebrow">Encuesta de lealtad</p>
     <h1 id="txtTitle">¿Qué tan probable es que recomiendes Globetek a un amigo o colega?</h1>
-    <p class="copy" id="txtCopy">Queremos saber tu opinión — tocá un número, toma 10 segundos.</p>
+    <p class="copy" id="txtCopy">Queremos saber tu opinión. Tocá un número, toma 10 segundos.</p>
 
     <div class="scale" id="scale" role="group" aria-label="Puntaje de 0 a 10"></div>
     <div class="scalelabels">
@@ -138,7 +138,7 @@
     <p id="txtThanksCopy">Tu respuesta ya quedó registrada. Tu opinión define cómo seguimos mejorando.</p>
   </div>
 
-  <div class="foot" id="txtFoot">Equipo de Customer Success · Globetek</div>
+  <div class="foot" id="txtFoot">Equipo de Customer Success de Globetek</div>
 </div>
 
 <script>
@@ -155,21 +155,21 @@
 
   var i18n = {
     es: {
-      eyebrow: 'NPS · Customer Success',
+      eyebrow: 'Encuesta de lealtad',
       title: '¿Qué tan probable es que recomiendes Globetek a un amigo o colega?',
-      copy: 'Queremos saber tu opinión — tocá un número, toma 10 segundos.',
+      copy: 'Queremos saber tu opinión. Tocá un número, toma 10 segundos.',
       low: 'No es probable',
       high: 'Muy probable',
       err: 'No pudimos registrar tu respuesta. Intentá de nuevo.',
       thanksTitle: '¡Gracias por tu tiempo!',
       thanksCopy: 'Tu respuesta ya quedó registrada. Tu opinión define cómo seguimos mejorando.',
       thanksCopyLow: 'Tu respuesta ya quedó registrada. Alguien del equipo va a contactarte para entender qué podemos hacer mejor.',
-      foot: 'Equipo de Customer Success · Globetek'
+      foot: 'Equipo de Customer Success de Globetek'
     },
     en: {
-      eyebrow: 'NPS · Customer Success',
+      eyebrow: 'Loyalty survey',
       title: 'How likely are you to recommend Globetek to a friend or colleague?',
-      copy: "We'd love to hear from you — tap a number, it takes 10 seconds.",
+      copy: "We'd love to hear from you. Tap a number, it takes 10 seconds.",
       low: 'Not at all likely',
       high: 'Extremely likely',
       err: "We couldn't save your answer. Please try again.",
@@ -182,7 +182,7 @@
   var t = i18n[lang];
 
   document.documentElement.lang = lang;
-  document.title = lang === 'en' ? 'Globetek — Survey' : 'Globetek — Encuesta';
+  document.title = lang === 'en' ? 'Globetek Survey' : 'Encuesta de Globetek';
   document.getElementById('txtEyebrow').textContent = t.eyebrow;
   document.getElementById('txtTitle').textContent = t.title;
   document.getElementById('txtCopy').textContent = t.copy;

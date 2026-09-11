@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Globetek — Encuesta</title>
+<title>Encuesta de Globetek</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -101,9 +101,9 @@
   <div class="edge"></div>
 
   <div class="body" id="rateView">
-    <p class="eyebrow" id="txtEyebrow">CSAT · Customer Success</p>
+    <p class="eyebrow" id="txtEyebrow">Encuesta de satisfacción</p>
     <h1 id="txtTitle">¿Cómo calificarías la atención que recibiste?</h1>
-    <p class="copy" id="txtCopy">Nos ayuda muchísimo saber cómo lo hicimos — tocá una estrella, toma 10 segundos.</p>
+    <p class="copy" id="txtCopy">Nos ayuda muchísimo saber cómo lo hicimos. Tocá una estrella, toma 10 segundos.</p>
 
     <div class="stars" id="stars" role="group" aria-label="Calificación de 1 a 5 estrellas">
       <button class="star" type="button" id="star-1" data-v="1" aria-label="1 estrella">★</button>
@@ -132,7 +132,7 @@
     <p id="txtThanksCopy">Tu opinión ya quedó registrada. Nos ayuda a mejorar cada día.</p>
   </div>
 
-  <div class="foot" id="txtFoot">Equipo de Customer Success · Globetek</div>
+  <div class="foot" id="txtFoot">Equipo de Customer Success de Globetek</div>
 </div>
 
 <script>
@@ -150,21 +150,21 @@
 
   var i18n = {
     es: {
-      eyebrow: 'CSAT · Customer Success',
+      eyebrow: 'Encuesta de satisfacción',
       title: '¿Cómo calificarías la atención que recibiste?',
-      copy: 'Nos ayuda muchísimo saber cómo lo hicimos — tocá una estrella, toma 10 segundos.',
+      copy: 'Nos ayuda muchísimo saber cómo lo hicimos. Tocá una estrella, toma 10 segundos.',
       low: 'Muy insatisfecho',
       high: 'Muy satisfecho',
       err: 'No pudimos registrar tu calificación. Intentá de nuevo.',
       thanksTitle: '¡Gracias por tu tiempo!',
       thanksCopy: 'Tu calificación ya quedó registrada. Nos ayuda a mejorar cada día.',
       thanksCopyLow: 'Tu calificación ya quedó registrada. Alguien del equipo va a revisar tu caso y te va a contactar.',
-      foot: 'Equipo de Customer Success · Globetek'
+      foot: 'Equipo de Customer Success de Globetek'
     },
     en: {
-      eyebrow: 'CSAT · Customer Success',
+      eyebrow: 'Satisfaction survey',
       title: 'How would you rate the support you received?',
-      copy: 'It really helps us know how we did — tap a star, it takes 10 seconds.',
+      copy: 'It really helps us know how we did. Tap a star, it takes 10 seconds.',
       low: 'Very unsatisfied',
       high: 'Very satisfied',
       err: "We couldn't save your rating. Please try again.",
@@ -177,7 +177,7 @@
   var t = i18n[lang];
 
   document.documentElement.lang = lang;
-  document.title = lang === 'en' ? 'Globetek — Survey' : 'Globetek — Encuesta';
+  document.title = lang === 'en' ? 'Globetek Survey' : 'Encuesta de Globetek';
   document.getElementById('txtEyebrow').textContent = t.eyebrow;
   document.getElementById('txtTitle').textContent = t.title;
   document.getElementById('txtCopy').textContent = t.copy;
