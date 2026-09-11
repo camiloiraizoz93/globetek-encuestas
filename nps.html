@@ -25,6 +25,11 @@
     --ink:#1A2433;
     --coraltint:#FDEDF1;
     --coralline:#F6C9D5;
+    --promoter:#1F9D76;
+    --promotertint:#E8F6F1;
+    --promoterline:#CFE9E0;
+    --passivetint:#EAF4FA;
+    --passiveline:#CFE3EF;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
@@ -63,24 +68,27 @@
   }
   p.copy{font-size:14px;color:#3d4a5c;line-height:1.6;margin:0 0 26px;max-width:40ch;}
 
-  /* 0-10 laid out as two rows of 6 and 5 so the numbers stay legible at phone width,
-     instead of eleven 24px-wide slivers. */
-  .scale{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:0 0 10px;}
+  /* Una sola fila de 11, como se ve un NPS en cualquier lado. La escala está
+     coloreada por banda (detractor / pasivo / promotor) desde el inicio, así el
+     color dice algo en vez de ser decoración. */
+  .scale{display:grid;grid-template-columns:repeat(11,1fr);gap:5px;margin:0 0 10px;}
   .num{
-    aspect-ratio:1;border-radius:12px;
-    background:var(--coraltint);border:1px solid var(--coralline);
+    aspect-ratio:1;border-radius:10px;border:1px solid transparent;
     display:flex;align-items:center;justify-content:center;
-    font-family:inherit;font-size:16px;font-weight:700;color:var(--coral);
+    font-family:inherit;font-size:14px;font-weight:700;
     cursor:pointer;padding:0;font-variant-numeric:tabular-nums;
     transition:transform .14s ease, background .14s ease, color .14s ease, box-shadow .14s ease;
   }
   .num:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(232,62,98,.22);}
   .num:focus-visible{outline:2px solid var(--deeplayer);outline-offset:2px;}
+  .num.detractor{background:var(--coraltint);border-color:var(--coralline);color:var(--coral);}
+  .num.passive{background:var(--passivetint);border-color:var(--passiveline);color:var(--deeplayer);}
+  .num.promoter{background:var(--promotertint);border-color:var(--promoterline);color:var(--promoter);}
   .num.active{background:var(--coral);border-color:var(--coral);color:#fff;}
   .num:disabled{cursor:default;}
   /* Detractor / passive / promoter, so the chosen answer reads back in NPS's own terms. */
-  .num.active.promoter{background:#1F9D76;border-color:#1F9D76;}
-  .num.active.passive{background:var(--deeplayer);border-color:var(--deeplayer);}
+  .num.active.promoter{background:var(--promoter);border-color:var(--promoter);color:#fff;}
+  .num.active.passive{background:var(--deeplayer);border-color:var(--deeplayer);color:#fff;}
 
   .scalelabels{
     display:flex;justify-content:space-between;font-size:10.5px;
@@ -93,7 +101,7 @@
     background:var(--coral);color:#fff;font-size:24px;font-weight:800;
     margin:0 0 20px;font-variant-numeric:tabular-nums;
   }
-  .thanks .chosen.promoter{background:#1F9D76;}
+  .thanks .chosen.promoter{background:var(--promoter);}
   .thanks .chosen.passive{background:var(--deeplayer);}
   .thanks h2{font-size:21px;color:var(--navy);margin:0 0 10px;font-weight:700;line-height:1.35;}
   .thanks p{font-size:14px;color:#3d4a5c;margin:0;line-height:1.6;max-width:40ch;}
@@ -186,14 +194,14 @@
   function band(val){
     if (val >= 9) return 'promoter';
     if (val >= 7) return 'passive';
-    return '';
+    return 'detractor';
   }
 
   var scale = document.getElementById('scale');
   for (var i = 0; i <= 10; i++) {
     var b = document.createElement('button');
     b.type = 'button';
-    b.className = 'num';
+    b.className = 'num ' + band(i);
     b.id = 'num-' + i;
     b.setAttribute('data-v', String(i));
     b.setAttribute('aria-label', String(i));
@@ -269,14 +277,13 @@
       submitted = true;
       var val = parseInt(btn.getAttribute('data-v'), 10);
       btn.classList.add('active');
-      if (band(val)) btn.classList.add(band(val));
       nums.forEach(function(n){ n.disabled = true; });
       document.getElementById('errMsg').style.display = 'none';
 
       submitScore(val, function(){
         document.getElementById('errMsg').style.display = 'block';
         submitted = false;
-        btn.className = 'num';
+        btn.className = 'num ' + band(val);
         nums.forEach(function(n){ n.disabled = false; });
       });
     });
