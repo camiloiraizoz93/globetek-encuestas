@@ -23,6 +23,8 @@
     --coolgrey:#B5C0CC;
     --slate:#7A8897;
     --ink:#1A2433;
+    --coraltint:#FDEDF1;
+    --coralline:#F6C9D5;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
@@ -46,6 +48,9 @@
     box-shadow:0 12px 32px rgba(6,20,46,.14);
   }
   .head{background:var(--navy);padding:24px 28px;display:flex;align-items:center;}
+  /* Filo de neón entre el header y el cuerpo — el acento de marca, en la única
+     parte de la tarjeta donde no compite con nada. */
+  .edge{height:3px;background:var(--neon);}
   /* Wordmark oficial de Globetek (el de la "g" custom), en blanco sobre el navy.
      Sale del archivo real del portal, no es un placeholder tipográfico. */
   .wordmark{display:block;width:96px;height:auto;}
@@ -59,16 +64,19 @@
     margin:0 0 12px;line-height:1.35;text-wrap:balance;
   }
   p.copy{font-size:14px;color:#3d4a5c;line-height:1.6;margin:0 0 28px;max-width:38ch;}
-  .stars{display:flex;gap:9px;margin:0 0 10px;}
+  .stars{display:flex;gap:10px;margin:0 0 12px;}
   .star{
-    flex:1;aspect-ratio:1;max-width:64px;border-radius:13px;border:none;
-    background:var(--cloudmist);display:flex;align-items:center;justify-content:center;
-    font-size:26px;line-height:1;color:var(--coolgrey);cursor:pointer;padding:0;
-    transition:transform .12s ease, background .12s ease, color .12s ease;
+    flex:1;aspect-ratio:1;max-width:64px;border-radius:14px;
+    /* Coral de marca sobre su propio tinte, con borde: en gris las estrellas leían
+       como deshabilitadas en vez de como algo que invita a tocarse. */
+    background:var(--coraltint);border:1px solid var(--coralline);
+    display:flex;align-items:center;justify-content:center;
+    font-size:29px;line-height:1;color:var(--coral);cursor:pointer;padding:0;
+    transition:transform .14s ease, background .14s ease, color .14s ease, box-shadow .14s ease;
   }
-  .star:hover{transform:translateY(-2px);}
+  .star:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(232,62,98,.22);}
   .star:focus-visible{outline:2px solid var(--deeplayer);outline-offset:2px;}
-  .star.active{background:var(--coral);color:#fff;}
+  .star.active{background:var(--coral);border-color:var(--coral);color:#fff;}
   .star:disabled{cursor:default;}
   .scalelabels{
     display:flex;justify-content:space-between;font-size:10.5px;
@@ -90,6 +98,7 @@
 <body>
 <div class="card">
   <div class="head"><img class="wordmark" src="globetek-wordmark-white.png" alt="Globetek" width="96" height="23"></div>
+  <div class="edge"></div>
 
   <div class="body" id="rateView">
     <p class="eyebrow" id="txtEyebrow">CSAT · Customer Success</p>
