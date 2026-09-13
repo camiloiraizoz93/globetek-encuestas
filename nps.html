@@ -47,6 +47,7 @@
   .card{
     max-width:520px;
     width:100%;
+    min-width:0; /* flex item: sin esto no se achica y se desborda en celular */
     background:#fff;
     border-radius:18px;
     overflow:hidden;
@@ -71,7 +72,7 @@
   /* Una sola fila de 11, como se ve un NPS en cualquier lado. La escala está
      coloreada por banda (detractor / pasivo / promotor) desde el inicio, así el
      color dice algo en vez de ser decoración. */
-  .scale{display:grid;grid-template-columns:repeat(11,1fr);gap:5px;margin:0 0 10px;}
+  .scale{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:5px;margin:0 0 10px;}
   .num{
     aspect-ratio:1;border-radius:10px;border:1px solid transparent;
     display:flex;align-items:center;justify-content:center;
@@ -120,7 +121,7 @@
 
   <div class="body" id="rateView">
     <p class="eyebrow" id="txtEyebrow">Encuesta de lealtad</p>
-    <h1 id="txtTitle">¿Qué tan probable es que recomiendes Globetek a un amigo o colega?</h1>
+    <h1 id="txtTitle">¿Qué tan probable es que recomiendes Globetek a un colega de otra financiera, telco o retailer?</h1>
     <p class="copy" id="txtCopy">Queremos saber tu opinión. Tocá un número, toma 10 segundos.</p>
 
     <div class="scale" id="scale" role="group" aria-label="Puntaje de 0 a 10"></div>
@@ -156,7 +157,7 @@
   var i18n = {
     es: {
       eyebrow: 'Encuesta de lealtad',
-      title: '¿Qué tan probable es que recomiendes Globetek a un amigo o colega?',
+      title: '¿Qué tan probable es que recomiendes Globetek a un colega de otra financiera, telco o retailer?',
       copy: 'Queremos saber tu opinión. Tocá un número, toma 10 segundos.',
       low: 'No es probable',
       high: 'Muy probable',
@@ -168,7 +169,7 @@
     },
     en: {
       eyebrow: 'Loyalty survey',
-      title: 'How likely are you to recommend Globetek to a friend or colleague?',
+      title: 'How likely are you to recommend Globetek to a colleague at another financier, telco or retailer?',
       copy: "We'd love to hear from you. Tap a number, it takes 10 seconds.",
       low: 'Not at all likely',
       high: 'Extremely likely',
